@@ -23,4 +23,5 @@ const logger = new duckdb.ConsoleLogger;
 const ddb = await worker_blocking.createDuckDB(MANUAL_BUNDLES, logger, worker_blocking.NODE_RUNTIME);
 const inst = await ddb.instantiate(bundle.mainModule, bundle.mainWorker);
 const db = await ddb.connect();
-console.log("inst", await db.query("SELECT 1").toArray());
+ddb.registerFileURL(`main.ts`, 'main.ts', duckdb.DuckDBDataProtocol.NODE_FS, false);
+console.log("inst", await db.query("select * from read_text('main.ts')").toArray());
