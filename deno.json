@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "path": "node:path",
+    "url": "node:url",
+    "fs/promises": "node:fs/promises"
+  }
+}
