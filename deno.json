@@ -5,6 +5,7 @@
   "imports": {
     "path": "node:path",
     "url": "node:url",
+    "buffer": "node:buffer",
     "fs/promises": "node:fs/promises"
   }
 }

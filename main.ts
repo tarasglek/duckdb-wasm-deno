@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import { Buffer } from "buffer";
 const MANUAL_BUNDLES = {
   mvp: {
     mainModule: "duckdb-mvp.wasm",
@@ -59,7 +59,7 @@ ddb.registerFileURL(
   false,
 );
 console.log(
-  "inst",
+  "Demo query with fs access:",
   await db.query("select md5(content) as md5 from read_text('main.ts')")
     .toArray()[0].md5,
 );
