@@ -2,7 +2,7 @@
 const DOWNLOAD_PREFIX = 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm/dist/';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 const MANUAL_BUNDLES = {
     mvp: {
