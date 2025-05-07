@@ -1,9 +1,6 @@
-import * as duckdb from '@duckdb/duckdb-wasm';
+
+const DOWNLOAD_PREFIX = 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm/dist/';
 import worker_blocking from './duckdb-node-blocking.cjs';
-// import duckdb_wasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
-// import mvp_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url';
-// import duckdb_wasm_eh from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url';
-// import eh_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url';
 
 const MANUAL_BUNDLES = {
     mvp: {
@@ -11,17 +8,10 @@ const MANUAL_BUNDLES = {
         mainWorker: "duckdb-node-blocking.cjs",
     },
 };
-// Select a bundle based on browser checks
-const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
-// Instantiate the asynchronus version of DuckDB-wasm
-// const worker = new worker_blocking.Worker(bundle.mainWorker!);
-// const worker = new worker_blocking.create(bundle.mainWorker!);
-// console.log(worker_blocking.DEFAULT_RUNTIME);
-// console.log(duckdb);
-const logger = new duckdb.ConsoleLogger;
+const logger = new  worker_blocking.ConsoleLogger();
 // console.log("worker_blocking", worker_blocking.NODE_RUNTIME)
 const ddb = await worker_blocking.createDuckDB(MANUAL_BUNDLES, logger, worker_blocking.NODE_RUNTIME);
-const inst = await ddb.instantiate(bundle.mainModule, bundle.mainWorker);
+const inst = await ddb.instantiate(MANUAL_BUNDLES.mvp.mainModule, MANUAL_BUNDLES.mvp.mainWorker);
 const db = await ddb.connect();
-ddb.registerFileURL(`main.ts`, 'main.ts', duckdb.DuckDBDataProtocol.NODE_FS, false);
-console.log("inst", await db.query("select * from read_text('main.ts')").toArray());
+ddb.registerFileURL(`main.ts`, 'main.ts', worker_blocking.DuckDBDataProtocol.NODE_FS, false);
+console.log("inst", await db.query("select md5(content) as md5 from read_text('main.ts')").toArray()[0].md5);
